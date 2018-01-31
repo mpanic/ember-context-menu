@@ -45,7 +45,7 @@ export default Service.extend({
     set(this, 'renderLeft', renderLeft(clientX, screenWidth));
     set(this, 'isActive',   true);
 
-    this.addDeactivateHandler();
+    // this.addDeactivateHandler();
   },
 
   willDestroy() {
