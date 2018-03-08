@@ -17,6 +17,10 @@ function renderLeft(xPosition, screenWidth) {
 export default Service.extend({
   isActive: false,
 
+  deactivate2() {
+    set(this, 'isActive',   false);
+  },
+
   activate(event, items, selection, details) {
     let { clientX, clientY } = event;
     let screenWidth = get(event, 'view.window.innerWidth');
