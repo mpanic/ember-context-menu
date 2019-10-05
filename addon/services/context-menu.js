@@ -1,8 +1,6 @@
 import Service      from '@ember/service';
 import { assert }   from '@ember/debug';
 import { get, set } from '@ember/object';
-import get from 'ember-metal/get';
-import set from 'ember-metal/set';
 
 const itemHeight    = 32;
 const safetyMarginX = 400;
