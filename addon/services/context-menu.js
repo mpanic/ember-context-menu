@@ -1,8 +1,12 @@
-import Service from 'ember-service';
-import { assert } from 'ember-metal/utils';
-
+import Service      from '@ember/service';
+import { assert }   from '@ember/debug';
+import { get, set } from '@ember/object';
 import get from 'ember-metal/get';
 import set from 'ember-metal/set';
+
+const itemHeight    = 32;
+const safetyMarginX = 400;
+const safetyMarginY = 32;
 
 function renderLeft(xPosition, screenWidth) {
   if (!xPosition || !screenWidth) { return false; }
@@ -10,7 +14,14 @@ function renderLeft(xPosition, screenWidth) {
   let onRightHalf = xPosition > screenWidth * 0.5;
   let spaceRight  = screenWidth - xPosition;
 
-  return onRightHalf && spaceRight < 400;
+  return onRightHalf && spaceRight < safetyMarginX;
+}
+
+function correctedPositionY(yPosition, screenHeight, itemCount) {
+  let estimatedHeight = itemCount * itemHeight + safetyMarginY;
+  let breakPoint      = screenHeight - estimatedHeight;
+
+  return yPosition > breakPoint ? breakPoint : yPosition;
 }
 
 export default Service.extend({
@@ -22,7 +33,8 @@ export default Service.extend({
 
   activate(event, items, selection, details) {
     let { clientX, clientY } = event;
-    let screenWidth = get(event, 'view.window.innerWidth');
+    let screenWidth  = get(event, 'view.window.innerWidth');
+    let screenHeight = get(event, 'view.window.innerHeight');
 
     selection = selection ? [].concat(selection) : [];
 
@@ -38,7 +50,7 @@ export default Service.extend({
 
     set(this, 'position', {
       left: clientX,
-      top:  clientY
+      top:  correctedPositionY(clientY, screenHeight, get(items, 'length'))
     });
 
     set(this, 'event',      event);
