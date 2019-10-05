@@ -3,7 +3,6 @@ import { assert } from 'ember-metal/utils';
 
 import get from 'ember-metal/get';
 import set from 'ember-metal/set';
-import $   from 'jquery';
 
 function renderLeft(xPosition, screenWidth) {
   if (!xPosition || !screenWidth) { return false; }
@@ -60,7 +59,7 @@ export default Service.extend({
     let deactivate = get(this, 'deactivate');
 
     if (deactivate != null) {
-      $(document.body).off('click', deactivate);
+      document.body.removeEventListener('click', deactivate);
       set(this, 'deactivate', null);
     }
   },
@@ -69,6 +68,6 @@ export default Service.extend({
     let deactivate = () => set(this, 'isActive', false);
     set(this, 'deactivate', deactivate);
 
-    $(document.body).one('click', deactivate);
+    document.body.addEventListener('click', deactivate, { once: true });
   }
 });
